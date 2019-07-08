@@ -38,6 +38,3 @@ Open http://localhost:8080/echo?text=I%20enjoy%20learning%20new%20things!
 to run the tests:
 - cd [main]/server
 - mvn clean test
-
-
-## Comments
