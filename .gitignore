@@ -1,2 +1,4 @@
 .idea
 LoyaltyOne.iml
+server/target
+client/node_modules

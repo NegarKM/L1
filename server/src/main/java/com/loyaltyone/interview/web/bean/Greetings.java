@@ -1,7 +1,10 @@
-package web.bean;
+package com.loyaltyone.interview.web.bean;
 
 public class Greetings {
     private String message;
+
+    public Greetings() {
+    }
 
     public Greetings(String message) {
         this.message = message;

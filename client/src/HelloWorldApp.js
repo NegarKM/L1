@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './HelloWorldApp.css';
 import * as Backend from './service/HelloWorldBackend';
 
-class App extends Component {
+class HelloWorldApp extends Component {
     constructor(props) {
         super(props);
 
@@ -24,7 +24,7 @@ class App extends Component {
         return (
             <div className="HelloWorldApp">
                 <p className="HelloWorldApp-intro">
-                    Getting a message from the server :  {this.state.greetings}
+                    {this.state.greetings}
                 </p>
             </div>
         );
