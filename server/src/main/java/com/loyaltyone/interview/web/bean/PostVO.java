@@ -1,12 +1,12 @@
 package com.loyaltyone.interview.web.bean;
 
-public class Post {
+public class PostVO {
     private String text;
 
-    public Post() {
+    public PostVO() {
     }
 
-    public Post(String text) {
+    public PostVO(String text) {
         this.text = text;
     }
 

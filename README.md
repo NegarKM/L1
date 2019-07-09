@@ -59,3 +59,28 @@ Open http://localhost:3000
 To run the tests:
 - cd [main]/server
 - mvn clean test
+
+# Step 4 - Bring in the database
+
+The web service have been extended to add a method to store text passed from the form into the database using design patterns where appropriate. In addition to saving the text, the date and time are also stored when the data is saved.
+
+
+## Run
+
+To create database in mySQL run the following commands:
+- show databases;
+- create database loyaltyoneinterview;
+- use loyaltyoneinterview;
+
+To see all users:
+- select user from mysql.user;
+
+To see tables, columns of tables and their contents:
+- show tables;
+- show columns from tablename;
+- select * from tablename; 
+
+Follow the same pattern as previous step to run the application!
+
+For running the tests, a "test" profile and a test database was added!
+
