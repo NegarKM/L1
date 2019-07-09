@@ -2,3 +2,13 @@ logging:
   level:
     root: ERROR
     org.springframework.web: DEBUG
+
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+  datasource:
+    url: jdbc:mysql://localhost:3306/loyaltyoneinterview
+    username: loyalty_user
+    password: a@1234
