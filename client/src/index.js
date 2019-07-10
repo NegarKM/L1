@@ -3,9 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
-import HelloWorldApp from './HelloWorldApp';
-import AddPostsApp from './AddPostsApp';
+import App from './App';
 
-ReactDOM.render(<HelloWorldApp />, document.getElementById('root'));
-ReactDOM.render(<AddPostsApp />, document.getElementById('addPosts'));
+ReactDOM.render(<App />, document.getElementById('root'));
 registerServiceWorker();

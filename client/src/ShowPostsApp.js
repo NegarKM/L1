@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import AddPostsBackend from './service/AddPostsBackend';
+import ShowPostsBackend from './service/ShowPostsBackend';
 
 class AddPostsApp extends Component {
     constructor() {
         super();
 
-        this.state = {
-            text : ''
-        };
+        ShowPostsBackend.retrieveAllPosts()
     }
 
     clickedForPost(thisForm) {
