@@ -1,21 +1,27 @@
 import React, { Component } from 'react';
-import * as Backend from './service/AddPostsBackend';
+import AddPostsBackend from './service/AddPostsBackend';
+import ShowPostsApp from './ShowPostsApp';
+import './AddPostsApp.css';
 
 class AddPostsApp extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
-            text : ''
+            text : '',
         };
+
     }
 
     clickedForPost(thisForm) {
         console.log('clicked ' + thisForm.refs.textBox.value);
-        Backend.getJson(thisForm.refs.textBox.value).then(response => {
+        AddPostsBackend.addPost(thisForm.refs.textBox.value).then(response => {
             this.setState({
                 text: response
             })
+
+            this.refs.showPost.refresh();
+
         })
     }
 
@@ -24,14 +30,13 @@ class AddPostsApp extends Component {
             <div>
                 <div>
                     <p>
-                        <input ref="textBox" type="text"/>
+                        <input ref="textBox" type="text" className="PostTextArea" maxLength = "256"/>
                         <button onClick={ (e) => { this.clickedForPost(this); } }>POST</button>
                     </p>
                 </div>
+
                 <div>
-                    <p>
-                        {this.state.text}
-                    </p>
+                    <ShowPostsApp ref="showPost"/>
                 </div>
             </div>
         );

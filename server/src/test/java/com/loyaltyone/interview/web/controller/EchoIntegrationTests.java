@@ -19,17 +19,23 @@ import static org.assertj.core.api.BDDAssertions.then;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {"management.port = 0"})
 @ActiveProfiles("test")
-public class EchoControllerTests {
+public class EchoIntegrationTests {
     @LocalServerPort
     private int port;
 
     @Autowired
     private TestRestTemplate testRestTemplate;
 
+    String testUsername = "test";
+    String testPassword = "123";
+
     @Test
     public void shouldReturn200() {
         String text = "t1 - I enjoy learning new things!";
-        ResponseEntity<PostVO> entity = testRestTemplate.getForEntity("http://localhost:" + this.port + "/echo?text=" + text,
+        String username = "test";
+        ResponseEntity<PostVO> entity = testRestTemplate
+                .withBasicAuth(testUsername, testPassword)
+                .getForEntity("http://localhost:" + this.port + "/echo?text=" + text + "&user=" + username,
                 PostVO.class);
 
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -39,7 +45,9 @@ public class EchoControllerTests {
 
     @Test
     public void shouldReturn400_missingParameter() {
-        ResponseEntity<PostVO> entity = testRestTemplate.getForEntity("http://localhost:" + this.port + "/echo",
+        ResponseEntity<PostVO> entity = testRestTemplate
+                .withBasicAuth(testUsername, testPassword)
+                .getForEntity("http://localhost:" + this.port + "/echo",
                 PostVO.class);
 
         then(entity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
@@ -47,7 +55,12 @@ public class EchoControllerTests {
 
     @Test
     public void shouldReturn400_invalidParameter() {
-        ResponseEntity<PostVO> entity = testRestTemplate.getForEntity("http://localhost:" + this.port + "/echo?abc=I enjoy learning new things!",
+        String text = "t1 - I enjoy learning new things!";
+        String username = "test";
+
+        ResponseEntity<PostVO> entity = testRestTemplate
+                .withBasicAuth(testUsername, testPassword)
+                .getForEntity("http://localhost:" + this.port + "/echo?abc=" + text + "&user=" + username,
                 PostVO.class);
 
         then(entity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
@@ -55,14 +68,11 @@ public class EchoControllerTests {
 
     @Test
     public void shouldReturn400_missingParameterName() {
-        ResponseEntity<PostVO> entity = testRestTemplate.getForEntity("http://localhost:" + this.port + "/echo?I enjoy learning new things!",
+        ResponseEntity<PostVO> entity = testRestTemplate
+                .withBasicAuth(testUsername, testPassword)
+                .getForEntity("http://localhost:" + this.port + "/echo?I enjoy learning new things!",
                 PostVO.class);
 
         then(entity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-    }
-
-    @Test
-    public void shouldReturn500_unsuccessfulSave() {
-
     }
 }
