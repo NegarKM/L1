@@ -84,3 +84,29 @@ Follow the same pattern as previous step to run the application!
 
 For running the tests, a "test" profile and a test database was added!
 
+
+# Step 5 - Include the user info
+
+Extend the form to capture the user name and a list of all the submissions by user. Add another method to the service to return all text submissions and display them at the bottom of the page.
+
+Table "User" is added to database and users should be added to database.
+
+A login page is added before /addPost.
+
+ShowPostsApp component is added to show all of the posts added by a specific user.
+
+Tests are extended. Authentication is added to previous integration tests.
+test user with following information should be added to test database: 
+- username: test
+- password: 123 
+
+
+New APIs:
+- /basicauth : to authenticate user
+- /showPosts : to retrieve all posts added by a specific user
+
+Changed APIs:
+- /echo : receive user info and timestamp as input and save in database (not only echo anymore!).
+
+ 
+

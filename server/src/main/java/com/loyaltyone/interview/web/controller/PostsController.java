@@ -1,6 +1,7 @@
 package com.loyaltyone.interview.web.controller;
 
 import com.loyaltyone.interview.model.Post;
+import com.loyaltyone.interview.model.User;
 import com.loyaltyone.interview.repository.IPostRepository;
 import com.loyaltyone.interview.repository.IUserRepository;
 import com.loyaltyone.interview.web.bean.PostVO;
@@ -28,7 +29,11 @@ public class PostsController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         try {
-            List<Post> userPosts = postRepo.findByUser(userRepo.findByUsername(username));
+            User user = userRepo.findByUsername(username);
+            if (user == null) {
+                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            List<Post> userPosts = postRepo.fetchPostsByUser(user.getId());
             List<PostVO> allPosts = new ArrayList<>();
             for (Post userPost : userPosts) {
                 allPosts.add(new PostVO(userPost.getText(), userPost.getTimestamp(), userPost.getUser().getUsername()));

@@ -1,6 +1,7 @@
 package com.loyaltyone.interview.web.controller;
 
 import com.loyaltyone.interview.model.Post;
+import com.loyaltyone.interview.model.User;
 import com.loyaltyone.interview.repository.IPostRepository;
 import com.loyaltyone.interview.repository.IUserRepository;
 import com.loyaltyone.interview.web.bean.PostVO;
@@ -31,8 +32,18 @@ public class EchoController {
         if (username == null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
+        if (text.trim().equals("")) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        if (text.length() > 256) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
         try {
-            Post post = postRepo.save(new Post(text, new Timestamp(System.currentTimeMillis()), userRepo.findByUsername(username)));
+            User user = userRepo.findByUsername(username);
+            if (user == null) {
+                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            Post post = postRepo.save(new Post(text, new Timestamp(System.currentTimeMillis()), user));
             return new ResponseEntity<>(new PostVO(post.getText()), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();

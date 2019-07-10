@@ -25,12 +25,8 @@ public class MyUserDetailsService implements UserDetailsService {
         System.out.println("loading user with username: " + username);
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            user = new User();
-            user.setUsername(username);
-            user.setPassword("n1234");
-            user.setId(1L);
-//            System.out.println("user not found.");
-//            throw new UsernameNotFoundException(username);
+            System.out.println("user not found.");
+            throw new UsernameNotFoundException(username);
         }
         return new MyUserPrincipal(user);
     }

@@ -10,7 +10,7 @@ const headers = {
 
 class AddPostsBackend {
     addPost(value) {
-        return axios.get(`${url}/echo?text=${encodeURIComponent(value)}&user=${localStorage.getItem("username")}`,
+        return axios.get(`${url}/echo?text=${encodeURIComponent(value)}&user=${localStorage.getItem("username")}`
                  )
             .then(res => {
                  return res.data

@@ -17,6 +17,9 @@ public class Post {
     @ManyToOne
     private User user;
 
+    public Post() {
+    }
+
     public Post(String text, Timestamp timestamp, User user) {
         this.text = text;
         this.timestamp = timestamp;

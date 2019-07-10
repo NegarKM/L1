@@ -1,39 +1,55 @@
 import React, { Component } from 'react';
+import './ShowPostsApp.css';
 import ShowPostsBackend from './service/ShowPostsBackend';
 
-class AddPostsApp extends Component {
-    constructor() {
-        super();
+class ShowPostsApp extends Component {
+    constructor(props) {
+        super(props);
 
-        ShowPostsBackend.retrieveAllPosts()
+        this.state = {
+            data: []
+        };
     }
 
-    clickedForPost(thisForm) {
-        console.log('clicked ' + thisForm.refs.textBox.value);
-        AddPostsBackend.addPost(thisForm.refs.textBox.value).then(response => {
-            this.setState({
-                text: response
+    refresh() {
+        ShowPostsBackend.retrieveAllPosts().then(response => {
+               this.setState({
+                   data: response
+               })
             })
-        })
+    };
+
+    componentDidMount() {
+        console.log('componentDidMount');
+        this.refresh();
     }
+
 
     render() {
+        if (!this.state.data) {
+            return (
+                <div>
+                    Add some posts!
+                </div>
+            );
+        }
         return (
             <div>
-                <div>
-                    <p>
-                        <input ref="textBox" type="text"/>
-                        <button onClick={ (e) => { this.clickedForPost(this); } }>POST</button>
-                    </p>
-                </div>
-                <div>
-                    <p>
-                        {this.state.text}
-                    </p>
-                </div>
+                {this.state.data.map(function (d, idx) {
+                    return (
+                        <li key = {idx}>
+                            <div className="PostsText">
+                                <p>{d.text}</p>
+                            </div>
+                            <div className="PostsDetails">
+                                <p>posted by {d.username} on {d.timestamp}</p>
+                            </div>
+                        </li>
+                    )
+                })}
             </div>
         );
     }
 }
 
-export default AddPostsApp;
+export default ShowPostsApp;

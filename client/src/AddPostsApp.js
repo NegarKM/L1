@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import AddPostsBackend from './service/AddPostsBackend';
+import ShowPostsApp from './ShowPostsApp';
+import './AddPostsApp.css';
 
 class AddPostsApp extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
-            text : ''
+            text : '',
         };
+
     }
 
     clickedForPost(thisForm) {
@@ -16,6 +19,9 @@ class AddPostsApp extends Component {
             this.setState({
                 text: response
             })
+
+            this.refs.showPost.refresh();
+
         })
     }
 
@@ -24,14 +30,13 @@ class AddPostsApp extends Component {
             <div>
                 <div>
                     <p>
-                        <input ref="textBox" type="text"/>
+                        <input ref="textBox" type="text" className="PostTextArea" maxLength = "256"/>
                         <button onClick={ (e) => { this.clickedForPost(this); } }>POST</button>
                     </p>
                 </div>
+
                 <div>
-                    <p>
-                        {this.state.text}
-                    </p>
+                    <ShowPostsApp ref="showPost"/>
                 </div>
             </div>
         );
