@@ -9,6 +9,8 @@ public class PostVO {
 
     private String username;
 
+    private CityVO cityVO;
+
     public PostVO() {
     }
 
@@ -16,10 +18,11 @@ public class PostVO {
         this.text = text;
     }
 
-    public PostVO(String text, Timestamp timestamp, String username) {
+    public PostVO(String text, Timestamp timestamp, String username, CityVO cityVO) {
         this.text = text;
         this.timestamp = timestamp;
         this.username = username;
+        this.cityVO = cityVO;
     }
 
     public String getText() {
@@ -44,5 +47,13 @@ public class PostVO {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public CityVO getCityVO() {
+        return cityVO;
+    }
+
+    public void setCityVO(CityVO cityVO) {
+        this.cityVO = cityVO;
     }
 }

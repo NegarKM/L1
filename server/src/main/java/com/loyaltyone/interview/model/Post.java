@@ -25,6 +25,8 @@ public class Post {
     @JoinColumn(name="parent_post")
     private Post parentPost;
 
+    private String city;
+
     public Post() {
     }
 
@@ -39,6 +41,13 @@ public class Post {
         this.timestamp = timestamp;
         this.user = user;
         this.parentPost = parentPost;
+    }
+
+    public Post(String text, Timestamp timestamp, User user, String city) {
+        this.text = text;
+        this.timestamp = timestamp;
+        this.user = user;
+        this.city = city;
     }
 
     public String getText() {
@@ -87,5 +96,13 @@ public class Post {
 
     public void setParentPost(Post parentPost) {
         this.parentPost = parentPost;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 }

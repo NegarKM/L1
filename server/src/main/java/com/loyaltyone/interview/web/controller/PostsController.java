@@ -4,8 +4,10 @@ import com.loyaltyone.interview.model.Post;
 import com.loyaltyone.interview.model.User;
 import com.loyaltyone.interview.repository.IPostRepository;
 import com.loyaltyone.interview.repository.IUserRepository;
+import com.loyaltyone.interview.web.bean.CityVO;
 import com.loyaltyone.interview.web.bean.PostVO;
 import com.loyaltyone.interview.web.models.AddCommentParams;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,9 +41,10 @@ public class PostsController {
                 return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
             }
             List<Post> userPosts = postRepo.fetchPostsByUser(user.getId());
+
             List<PostVO> allPosts = new ArrayList<>();
             for (Post userPost : userPosts) {
-                allPosts.add(new PostVO(userPost.getText(), userPost.getTimestamp(), userPost.getUser().getUsername()));
+                allPosts.add(createPostVO(userPost));
             }
             return new ResponseEntity<>(allPosts, HttpStatus.OK);
         } catch (Exception e) {
@@ -64,7 +67,7 @@ public class PostsController {
             Post newPost = postRepo.save(new Post(addCommentParams.getCommentText(),
                     new Timestamp(System.currentTimeMillis()), parentPost.get().getUser(), parentPost.get()));
 
-            PostVO postVO = new PostVO(newPost.getText(), newPost.getTimestamp(), newPost.getUser().getUsername());
+            PostVO postVO = createPostVO(newPost);
             return new ResponseEntity<>(postVO, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -82,12 +85,54 @@ public class PostsController {
 
             List<PostVO> resultPosts = new ArrayList<>();
             for (Post userPost : childPosts) {
-                resultPosts.add(new PostVO(userPost.getText(), userPost.getTimestamp(), userPost.getUser().getUsername()));
+                PostVO postVO = createPostVO(userPost);
+                resultPosts.add(postVO);
             }
             return new ResponseEntity<>(resultPosts, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+
+    @GetMapping("/createPost")
+    public ResponseEntity<PostVO> createPost(@RequestParam(name="text") String text,
+                                             @RequestParam(name="user") String username,
+                                             @RequestParam(name="cityName") String cityName) {
+        if (text == null || username == null || cityName == null) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        if (text.trim().equals("")) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        if (text.length() > 256) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        try {
+            User user = userRepo.findByUsername(username);
+            if (user == null) {
+                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            Post post = postRepo.save(new Post(text, new Timestamp(System.currentTimeMillis()), user, cityName));
+
+            PostVO postVO = createPostVO(post);
+            return new ResponseEntity<>(postVO, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public static PostVO createPostVO(Post post) {
+        CityVO cityVO = null;
+        if (post.getCity() != null) {
+            try {
+                cityVO = CityController.getCityDetailsFromThirdParty(post.getCity());
+            } catch (UnirestException e) {
+                e.printStackTrace();
+            }
+        }
+        return new PostVO(post.getText(), post.getTimestamp(), post.getUser().getUsername(), cityVO);
     }
 }

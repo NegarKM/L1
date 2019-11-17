@@ -126,3 +126,23 @@ Test changes:
 - Tests are extended to test new APIs
 
   
+# Step 7 - Capture more data
+
+Capture user’s location (user enters the city) on the form. For every post, include city, city’s latitude and longitude and current temperature. Display this information on the form, next to each post.
+
+DB changes:
+- Now we add cityName to Post entity to save the city for the main posts(not comments!)
+
+Server(Backend) changes:
+- in Backend we add a new API /createPost which is like /echo API that we already had. But additionaly it gets the cityName as well. After saving the Post with the cityName, We call a free API from https://api.openweathermap.org which takes the city name and country name and returns the details of the city including latitude, longitude and current temperature. So to use the api we call the following url by Unirest:
+
+ https://api.openweathermap.org/data/2.5/weather?q=" + cityName + ",CA&appid=API_KEY
+
+- So some new dependencies are added to pom.xml.
+ 
+ Test changes:
+ - Tests are extended to test new APIs
+
+FrontEnd changes:
+- city information (lon, lat, temp) is added for all of the requests that returns Post entity in their response.
+- in form of creating a new Post we get the city name and display the related information of that city next to each post. 
