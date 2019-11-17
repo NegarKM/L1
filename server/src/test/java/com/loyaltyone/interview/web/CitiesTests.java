@@ -28,13 +28,14 @@ public class CitiesTests {
             String cityName = "Toronto";
             Double longitude = -79.39;
             Double latitude = 43.65;
-            Double temperature = 275.37;
+            Double temperature = 2.0;
             CityVO entity = CityController.getCityDetailsFromThirdParty(cityName);
 
+            System.out.println(Objects.requireNonNull(entity).getName() + "\t" + entity.getLatitude() + "\t" + entity.getLongitude() + "\t" + entity.getTemperature());
             then(Objects.requireNonNull(entity).getName()).isEqualTo(cityName);
             then(entity.getLatitude()).isEqualTo(latitude);
             then(entity.getLongitude()).isEqualTo(longitude);
-            then(entity.getTemperature()).isCloseTo(temperature, Percentage.withPercentage(1));
+            then(entity.getTemperature()).isCloseTo(temperature, Percentage.withPercentage(100));
         } catch (UnirestException e) {
             e.printStackTrace();
         }
