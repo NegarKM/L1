@@ -3,6 +3,7 @@ package com.loyaltyone.interview.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 public class Post {
@@ -17,6 +18,13 @@ public class Post {
     @ManyToOne
     private User user;
 
+    @OneToMany(mappedBy = "parentPost")
+    private List<Post> comments;
+
+    @ManyToOne(targetEntity=Post.class)
+    @JoinColumn(name="parent_post")
+    private Post parentPost;
+
     public Post() {
     }
 
@@ -24,6 +32,13 @@ public class Post {
         this.text = text;
         this.timestamp = timestamp;
         this.user = user;
+    }
+
+    public Post(String text, Timestamp timestamp, User user, Post parentPost) {
+        this.text = text;
+        this.timestamp = timestamp;
+        this.user = user;
+        this.parentPost = parentPost;
     }
 
     public String getText() {
@@ -56,5 +71,21 @@ public class Post {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Post> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Post> comments) {
+        this.comments = comments;
+    }
+
+    public Post getParentPost() {
+        return parentPost;
+    }
+
+    public void setParentPost(Post parentPost) {
+        this.parentPost = parentPost;
     }
 }

@@ -1,6 +1,7 @@
 package com.loyaltyone.interview.web.controller;
 
 import com.loyaltyone.interview.web.bean.PostVO;
+import com.loyaltyone.interview.web.models.AddCommentParams;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import static org.assertj.core.api.BDDAssertions.then;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {"management.port = 0"})
 @ActiveProfiles("test")
-public class EchoIntegrationTests {
+public class AddCommentTests {
     @LocalServerPort
     private int port;
 
@@ -32,48 +33,31 @@ public class EchoIntegrationTests {
     private String testPassword = "123";
 
     @Test
-    public void shouldReturn200() {
-        String text = "t1 - I enjoy learning new things!";
-        String username = "test";
+    public void addComment_OK() {
+        String commentText = "my comment " + Math.random();
+        Long parentPostId = 5L;
+        AddCommentParams addCommentParams = new AddCommentParams();
+        addCommentParams.setCommentText(commentText);
+        addCommentParams.setParentPostId(parentPostId);
         ResponseEntity<PostVO> entity = testRestTemplate
                 .withBasicAuth(testUsername, testPassword)
-                .getForEntity("http://localhost:" + this.port + "/echo?text=" + text + "&user=" + username,
-                PostVO.class);
+                .postForEntity("http://localhost:" + this.port + "/addComment", addCommentParams, PostVO.class);
 
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        then(Objects.requireNonNull(entity.getBody()).getText()).isEqualTo(text);
+        then(Objects.requireNonNull(entity.getBody()).getText()).isEqualTo(commentText);
     }
 
     @Test
-    public void shouldReturn400_missingParameter() {
+    public void addComment_invalidParentPostID_BadRequest() {
+        String commentText = "my comment " + Math.random();
+        Long parentPostId = 0L;
+        AddCommentParams addCommentParams = new AddCommentParams();
+        addCommentParams.setCommentText(commentText);
+        addCommentParams.setParentPostId(parentPostId);
         ResponseEntity<PostVO> entity = testRestTemplate
                 .withBasicAuth(testUsername, testPassword)
-                .getForEntity("http://localhost:" + this.port + "/echo",
-                PostVO.class);
-
-        then(entity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-    }
-
-    @Test
-    public void shouldReturn400_invalidParameter() {
-        String text = "t1 - I enjoy learning new things!";
-        String username = "test";
-
-        ResponseEntity<PostVO> entity = testRestTemplate
-                .withBasicAuth(testUsername, testPassword)
-                .getForEntity("http://localhost:" + this.port + "/echo?abc=" + text + "&user=" + username,
-                PostVO.class);
-
-        then(entity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-    }
-
-    @Test
-    public void shouldReturn400_missingParameterName() {
-        ResponseEntity<PostVO> entity = testRestTemplate
-                .withBasicAuth(testUsername, testPassword)
-                .getForEntity("http://localhost:" + this.port + "/echo?I enjoy learning new things!",
-                PostVO.class);
+                .postForEntity("http://localhost:" + this.port + "/addComment", addCommentParams, PostVO.class);
 
         then(entity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }

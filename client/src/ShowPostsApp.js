@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import './ShowPostsApp.css';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import LoginComponent from './LoginComponent'
 import ShowPostsBackend from './service/ShowPostsBackend';
+import PostComponent from './PostComponent';
 
 class ShowPostsApp extends Component {
     constructor(props) {
@@ -9,13 +12,20 @@ class ShowPostsApp extends Component {
         this.state = {
             data: []
         };
+
+        this.refreshAll = this.refreshAll.bind(this);
     }
 
     refresh() {
+        console.log('refresh!!!!');
         ShowPostsBackend.retrieveAllPosts().then(response => {
-               this.setState({
-                   data: response
-               })
+                if (response.hasError) {
+                    this.setState({error: response.error})
+                } else {
+                   this.setState({
+                       data: response.data
+                   })
+                }
             })
     };
 
@@ -24,9 +34,13 @@ class ShowPostsApp extends Component {
         this.refresh();
     }
 
+    refreshAll() {
+        console.log('refreshAll called');
+        this.setState({changed: true});
+    }
 
     render() {
-        if (!this.state.data) {
+        if (!this.state.error && !this.state.data) {
             return (
                 <div>
                     Add some posts!
@@ -37,16 +51,11 @@ class ShowPostsApp extends Component {
             <div>
                 {this.state.data.map(function (d, idx) {
                     return (
-                        <li key = {idx}>
-                            <div className="PostsText">
-                                <p>{d.text}</p>
-                            </div>
-                            <div className="PostsDetails">
-                                <p>posted by {d.username} on {d.timestamp}</p>
-                            </div>
-                        </li>
+                        <div>
+                        <PostComponent key={d.text} data={d} ref={idx}/>
+                        </div>
                     )
-                })}
+                }, this)}
             </div>
         );
     }

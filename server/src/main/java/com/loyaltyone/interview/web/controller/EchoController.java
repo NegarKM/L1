@@ -24,7 +24,7 @@ public class EchoController {
     @Autowired
     private IPostRepository postRepo;
 
-    @GetMapping("/echo")
+    @GetMapping("/echo") // it's actually the api for: /createPost
     public ResponseEntity<PostVO> echo(@RequestParam(name="text") String text, @RequestParam(name="user") String username) {
         if (text == null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

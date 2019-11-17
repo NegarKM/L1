@@ -68,6 +68,7 @@ The web service have been extended to add a method to store text passed from the
 ## Run
 
 To create database in mySQL run the following commands:
+(I used MySQL 5.7 Command Line Client)
 - show databases;
 - create database loyaltyoneinterview;
 - use loyaltyoneinterview;
@@ -110,3 +111,18 @@ Changed APIs:
 
  
 
+# Step 6 - Replying to text
+
+Extend your solution from previous challenge to allow “responding” to already posted texts and display responses, indented, below the related text entry.
+
+DB changes: 
+- Now we change the Post entity to have a tree structure. every Post can have a comment which is a Post entity again!
+
+Server(Backend) changes: we add two apis:
+- /addComment API: it gets parentPostID and a text as a comment and save a new Post which is added to the list of comments of the given parent. The response of the API is the information of the comment (Post entity)
+- /getPostsByParentPostId: as we can't show all of the posts and their comments and after any changes in comments, we can't render the whole database(!!!) so we add this API so we can get just the comments of every post we need to show to the user. it gets the parentPostId in the request and return all the comments regarding to that Post. Again the response contains a list of Post entity.
+
+Test changes:
+- Tests are extended to test new APIs
+
+  
