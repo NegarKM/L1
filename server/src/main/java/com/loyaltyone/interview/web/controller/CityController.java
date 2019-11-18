@@ -1,6 +1,8 @@
 package com.loyaltyone.interview.web.controller;
 
+import com.loyaltyone.interview.model.Post;
 import com.loyaltyone.interview.web.bean.CityVO;
+import com.loyaltyone.interview.web.bean.PostVO;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONObject;
@@ -68,11 +70,9 @@ public class CityController {
             Double longitude = coordObj.getDouble("lon");
             Double latitude = coordObj.getDouble("lat");
             JSONObject mainObj = bodyJson.getJSONObject("main");
-            double temperature = mainObj.getDouble("temp");
-            temperature = temperature - 273.15;
-            temperature = Math.round(temperature);
+            Double temperature = mainObj.getDouble("temp");
 
-            return new CityVO(cityName, latitude, longitude, temperature);
+            return createCityVO(cityName, latitude, longitude, temperature);
         } else {
             System.out.println(response.getStatus());
             //TODO: we can throw related exceptions regarding response.getStatus()
@@ -83,5 +83,26 @@ public class CityController {
 */
             return null;
         }
+    }
+
+    private static CityVO createCityVO(String cityName, Double latitude, Double longitude, Double temperature) {
+        temperature = temperature - 273.15;
+        String temperatureInString = Math.round(temperature) + " °C";
+
+        String latitudeInString = "";
+        if (latitude > 0) {
+            latitudeInString = latitude + " °N";
+        } else {
+            latitudeInString = latitude * -1 + " °S";
+        }
+
+        String longitudeInString = "";
+        if (longitude > 0) {
+            longitudeInString = longitude + " °E";
+        } else {
+            longitudeInString = longitude * -1 + " °W";
+        }
+
+        return new CityVO(cityName, latitudeInString, longitudeInString, temperatureInString);
     }
 }

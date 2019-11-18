@@ -3,13 +3,13 @@ package com.loyaltyone.interview.web.bean;
 public class CityVO {
     private String name;
 
-    private Double latitude;
+    private String latitude;
 
-    private Double longitude;
+    private String longitude;
 
-    private Double temperature;
+    private String temperature;
 
-    public CityVO(String name, Double latitude, Double longitude, Double temperature) {
+    public CityVO(String name, String latitude, String longitude, String temperature) {
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -24,27 +24,27 @@ public class CityVO {
         this.name = name;
     }
 
-    public Double getLatitude() {
+    public String getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(Double latitude) {
+    public void setLatitude(String latitude) {
         this.latitude = latitude;
     }
 
-    public Double getLongitude() {
+    public String getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(Double longitude) {
+    public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
 
-    public Double getTemperature() {
+    public String getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(Double temperature) {
+    public void setTemperature(String temperature) {
         this.temperature = temperature;
     }
 }

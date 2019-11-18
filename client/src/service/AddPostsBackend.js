@@ -9,16 +9,19 @@ const headers = {
 };
 
 class AddPostsBackend {
-    addPost(value) {
-        return axios.get(`${url}/echo?text=${encodeURIComponent(value)}&user=${localStorage.getItem("username")}`
-                 )
-            .then(res => {
-                 return res.data
-            })
-            .then(data => {
-                console.log(data);
-                return data.text;
-            });
+    addPost(text, cityName) {
+        return axios.post(`${url}/createPost`, {
+            text: text,
+            username: localStorage.getItem("username"),
+            cityName: cityName
+        })
+        .then(res => {
+             return res.data
+        })
+        .then(data => {
+            console.log(data);
+            return data;
+        });
     };
 }
 

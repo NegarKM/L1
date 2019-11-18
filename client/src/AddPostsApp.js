@@ -9,19 +9,20 @@ class AddPostsApp extends Component {
 
         this.state = {
             text : '',
+            cityName : ''
         };
-
     }
 
     clickedForPost(thisForm) {
         console.log('clicked ' + thisForm.refs.textBox.value);
-        AddPostsBackend.addPost(thisForm.refs.textBox.value).then(response => {
+        AddPostsBackend.addPost(thisForm.refs.textBox.value, "Toronto")
+        .then(response => {
             this.setState({
-                text: response
+                text: response.text,
+                cityName: response.cityVO.name
             })
 
             this.refs.showPost.refresh();
-
         })
     }
 
