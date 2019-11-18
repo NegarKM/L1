@@ -100,9 +100,9 @@ public class PostsController {
     @PostMapping("/createPost")
     public ResponseEntity<PostVO> createPost(@RequestBody CreatePostParams createPostParams) {
         String text = createPostParams.getText();
-        String userName = createPostParams.getUserName();
+        String username = createPostParams.getUsername();
         String cityName = createPostParams.getCityName();
-        if (text == null || userName == null || cityName == null) {
+        if (text == null || username == null || cityName == null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         if (text.trim().equals("")) {
@@ -112,7 +112,7 @@ public class PostsController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         try {
-            User user = userRepo.findByUsername(userName);
+            User user = userRepo.findByUsername(username);
             if (user == null) {
                 return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
             }
