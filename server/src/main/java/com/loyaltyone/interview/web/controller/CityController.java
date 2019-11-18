@@ -70,6 +70,7 @@ public class CityController {
             JSONObject mainObj = bodyJson.getJSONObject("main");
             double temperature = mainObj.getDouble("temp");
             temperature = temperature - 273.15;
+            temperature = Math.round(temperature);
 
             return new CityVO(cityName, latitude, longitude, temperature);
         } else {

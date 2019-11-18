@@ -3,6 +3,8 @@ package com.loyaltyone.interview.web.bean;
 import java.sql.Timestamp;
 
 public class PostVO {
+    private Long id;
+
     private String text;
 
     private Timestamp timestamp;
@@ -18,11 +20,20 @@ public class PostVO {
         this.text = text;
     }
 
-    public PostVO(String text, Timestamp timestamp, String username, CityVO cityVO) {
+    public PostVO(Long id, String text, Timestamp timestamp, String username, CityVO cityVO) {
+        this.id = id;
         this.text = text;
         this.timestamp = timestamp;
         this.username = username;
         this.cityVO = cityVO;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getText() {

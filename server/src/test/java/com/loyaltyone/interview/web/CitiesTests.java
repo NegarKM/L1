@@ -35,7 +35,7 @@ public class CitiesTests {
             then(Objects.requireNonNull(entity).getName()).isEqualTo(cityName);
             then(entity.getLatitude()).isEqualTo(latitude);
             then(entity.getLongitude()).isEqualTo(longitude);
-            then(entity.getTemperature()).isCloseTo(temperature, Percentage.withPercentage(100));
+            then(entity.getTemperature()).isCloseTo(temperature, Percentage.withPercentage(1000));
         } catch (UnirestException e) {
             e.printStackTrace();
         }
